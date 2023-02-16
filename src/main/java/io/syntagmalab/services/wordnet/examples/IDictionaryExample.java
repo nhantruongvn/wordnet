@@ -51,10 +51,11 @@ public class IDictionaryExample {
         System.out.println("====================");
 
         // look up all senses of a given word
-        IIndexWord idxWord2 = dict.getIndexWord("nice", POS.ADJECTIVE);
+        IIndexWord idxWord2 = dict.getIndexWord("nice", POS.getPartOfSpeech(3));
         List<IWordID> wordIdList2 = idxWord2.getWordIDs();
 
         for (IWordID iWordId : wordIdList2) {
+            System.out.println(iWordId);
             System.out.println(dict.getWord(iWordId).getLemma() + " = " + dict.getWord(iWordId).getSynset().getGloss());
         }
     }
