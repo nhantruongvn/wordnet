@@ -12,9 +12,14 @@ import java.util.List;
 
 public class GenerateWordlist {
     public static void main(String[] args) throws IOException {
-        final String PATH = "./src/main/resources/wndict";
+        final String DICTIONARY_PATH = "./src/main/resources/wndict";
         final String INPUT_FILE = "./src/main/resources/static/5000_words_with_POS.txt";
         final String OUTPUT_FILE = "./src/main/resources/static/5000_words_with_definitions.txt";
+
+        // construct the dictionary object and open it
+        URL url = new URL("file", null, DICTIONARY_PATH);
+        IDictionary dict = new Dictionary(url);
+        dict.open();
 
         // create output file
         File outputFile = new File(OUTPUT_FILE);
@@ -31,10 +36,6 @@ public class GenerateWordlist {
             // split each line into word and POS-number
             word = line.split("\\_")[0];
             pos = Integer.parseInt(line.split("\\_")[1]);
-
-            URL url = new URL("file", null, PATH);
-            IDictionary dict = new Dictionary(url);
-            dict.open();
 
             // get all senses of a word
             IIndexWord iIndexWord = dict.getIndexWord(word, POS.getPartOfSpeech(pos));
