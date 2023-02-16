@@ -13,8 +13,8 @@ import java.util.List;
 public class GenerateWordlist {
     public static void main(String[] args) throws IOException {
         final String PATH = "./src/main/resources/wndict";
-        final String OUTPUT_FILE = "./src/main/resources/static/5000_words_with_definitions.txt";
         final String INPUT_FILE = "./src/main/resources/static/5000_words_with_POS.txt";
+        final String OUTPUT_FILE = "./src/main/resources/static/5000_words_with_definitions.txt";
 
         try {
             // create output file
@@ -29,8 +29,10 @@ public class GenerateWordlist {
             Integer pos;
 
             while (null != line) {
+                // split each line into word and POS-number
                 word = line.split("\\_")[0];
                 pos = Integer.parseInt(line.split("\\_")[1]);
+
                 URL url = new URL("file", null, PATH);
                 IDictionary dict = new Dictionary(url);
                 dict.open();
@@ -38,11 +40,11 @@ public class GenerateWordlist {
                 // get all senses of a word
                 IIndexWord iIndexWord = dict.getIndexWord(word, POS.getPartOfSpeech(pos));
                 if (iIndexWord == null) {
-                    throw new NullPointerException("The word " + word + " cannot be found.");
+                    throw new NullPointerException("The word '" + word + "' cannot be found.");
                 }
                 List<IWordID> iWordIdList = iIndexWord.getWordIDs();
 
-                // write keyword-definition in output file
+                // write keyword-definition pairs in output file
                 for (IWordID iWordId : iWordIdList) {
                     String keyword = dict.getWord(iWordId).getLemma();
                     String definition = dict.getWord(iWordId).getSynset().getGloss();
