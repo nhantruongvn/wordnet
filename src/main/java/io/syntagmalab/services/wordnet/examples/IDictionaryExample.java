@@ -2,10 +2,8 @@ package io.syntagmalab.services.wordnet.examples;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
-import edu.mit.jwi.data.parse.SenseKeyParser;
 import edu.mit.jwi.item.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,26 +27,35 @@ public class IDictionaryExample {
         IDictionary dict = new Dictionary(url);
         dict.open();
 
-        // look up first sense of the word "dog"
+        // look up first sense of the word "baby"
         IIndexWord idxWord = dict.getIndexWord("baby", POS.NOUN);
         IWordID wordID = idxWord.getWordIDs().get(0);
         IWord word = dict.getWord(wordID);
         System.out.println("Id = " + wordID);
         System.out.println("Lemma = " + word.getLemma());
         System.out.println("Gloss = " + word.getSynset().getGloss());
+        System.out.println("====================");
 
-        // look up a word without POS
-        IIndexWord idxWord1 = dict.getIndexWord("dude", POS.NOUN);
+        // look up related words
+        IIndexWord idxWord1 = dict.getIndexWord("king", POS.NOUN);
 
         IWordID wordID1 = idxWord1.getWordIDs().get(0);
         IWord word1 = dict.getWord(wordID1);
         System.out.println(word1.getLemma() + " = " + word1.getSynset().getGloss());
 
-        List<IWordID> relatedWords = word1.getRelatedWords();
-        for (IWordID wordId : relatedWords) {
-            IWord wordx = dict.getWord(wordId);
-            System.out.println(wordx.getLemma() + " = " + wordx.getSynset().getGloss());
+        List<IWordID> word1RelatedWords = word1.getRelatedWords();
+        for (IWordID wordId : word1RelatedWords) {
+            IWord iWord = dict.getWord(wordId);
+            System.out.println(iWord.getLemma() + " = " + iWord.getSynset().getGloss());
         }
+        System.out.println("====================");
 
+        // look up all senses of a given word
+        IIndexWord idxWord2 = dict.getIndexWord("nice", POS.ADJECTIVE);
+        List<IWordID> wordIdList2 = idxWord2.getWordIDs();
+
+        for (IWordID iWordId : wordIdList2) {
+            System.out.println(dict.getWord(iWordId).getLemma() + " = " + dict.getWord(iWordId).getSynset().getGloss());
+        }
     }
 }
