@@ -40,7 +40,10 @@ public class GenerateWordlist {
             // get all senses of a word
             IIndexWord iIndexWord = dict.getIndexWord(word, POS.getPartOfSpeech(pos));
             if (iIndexWord == null) {
-                throw new NullPointerException("The word '" + word + "' cannot be found.");
+                bufferedWriter.write(word);
+                bufferedWriter.newLine();
+                line = bufferedReader.readLine();
+                continue;
             }
             List<IWordID> iWordIdList = iIndexWord.getWordIDs();
 
